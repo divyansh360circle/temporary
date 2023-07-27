@@ -11,6 +11,7 @@ const QrLogin = require("./models/QrLogin");
 var store = new ExpressBrute.MemoryStore(); // stores state locally, don't use this in production
 var bruteforce = new ExpressBrute(store);
 const { Expo } = require('expo-server-sdk')
+const fs = require('fs');
 app.use(cors());
 
 const server = http.createServer(app);
@@ -148,7 +149,9 @@ app.get("/getData/:id?",bruteforce.prevent, async(req,res)=>{
   res.status(200).json({message:token})
 })
 app.use('/',(req,res)=>{
-  res.status(200).send("server started")
+  fs.readFile(__dirname + '/index.html', 'utf8', (err, text) => {
+    res.send(text);
+});
 })
 server.listen(5000, () => {
   initializeDB()
